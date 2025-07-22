@@ -11,7 +11,7 @@ migrations:
 	uv run manage.py migrate
 
 compose-run:
-	docker-compose up
+	docker-compose up --build
 
 before-run: migrations
 
