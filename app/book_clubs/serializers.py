@@ -1,12 +1,16 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from app.book_clubs.models import BookClub
-from app.users.serializers import UserPreviewSerializer
 
+class BookClubMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'username')
 
 class BookClubSerializer(serializers.ModelSerializer):
-    owner = UserPreviewSerializer(read_only=True)
-    members = UserPreviewSerializer(many=True, read_only=True)
+    owner = BookClubMemberSerializer(read_only=True)
+    members = BookClubMemberSerializer(many=True, read_only=True)
     class Meta:
         model = BookClub
         fields = ('name', 'description', 'status', 'owner', 'members')

@@ -1,16 +1,25 @@
 from rest_framework import viewsets, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from app.book_clubs.models import BookClub
 from app.book_clubs.serializers import BookClubSerializer, CreateBookClubSerializer
 
+class MyPageNumberPagination(PageNumberPagination):
+    page_size = 10
+    max_page_size = 50
+    page_size_query_param = 'page_size'
 
 class BookClubsViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = BookClub.objects.all()
-        serializer = BookClubSerializer(queryset, many=True)
-        return Response(serializer.data)
+
+        paginator = MyPageNumberPagination()
+        page = paginator.paginate_queryset(queryset, request)
+
+        serializer = BookClubSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk=None):
         queryset = BookClub.objects.get(id=pk)

@@ -21,9 +21,11 @@ DEBUG = True if os.getenv("ENV") == 'dev' else False
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
-    "0.0.0.0:8000"
+    "0.0.0.0:8000",
     "localhost"
 ]
+
+USE_X_FORWARDED_HOST = True
 
 
 # Application definition
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
     'app.book_clubs.reading_goal',
 
     'rest_framework',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -54,6 +57,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 40,
+    'PAGE_SIZE_QUERY_PARAM': 'page_size',
+}
 
 ROOT_URLCONF = 'app.urls'
 
@@ -104,6 +113,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -127,3 +142,9 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOCIAL_AUTH_GITHUB_KEY = os.getenv("OAUTH_GITHUB_KEY")
+SOCIAL_AUTH_GITHUB_SECRET = os.getenv("OAUTH_GITHUB_SECRET")
+
+
+LOGIN_REDIRECT_URL = '/'

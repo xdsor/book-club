@@ -1,6 +1,7 @@
 start: before-run run
 
-dev: build-static before-run compose-run
+dev:
+	uv run manage.py runserver
 
 build-static:
 	uv run manage.py collectstatic --noinput
@@ -16,4 +17,4 @@ compose-run:
 before-run: migrations
 
 run:
-	uv run gunicorn app.wsgi --bind 0.0.0.0:8000
+	uv run gunicorn app.wsgi --bind 127.0.0.1:8000

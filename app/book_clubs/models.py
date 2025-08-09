@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 
 BOOK_CLUB_STATUSES = (
@@ -8,11 +8,13 @@ BOOK_CLUB_STATUSES = (
     ("READING", "READING")
 )
 
+user_model = get_user_model()
+
 class BookClub(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=512)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_clubs')
-    members = models.ManyToManyField(User, related_name='member_clubs')
+    owner = models.ForeignKey(user_model, on_delete=models.CASCADE, related_name='owner_clubs')
+    members = models.ManyToManyField(user_model, related_name='member_clubs')
     status = models.CharField(max_length=255, choices=BOOK_CLUB_STATUSES, default="IDLE")
 
     def __str__(self):

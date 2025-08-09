@@ -10,4 +10,5 @@ dependencies = [
     "dotenv>=0.9.9",
     "gunicorn>=23.0.0",
     "markdown>=3.8.2",
+    "social-auth-app-django>=5.5.1",
 ]
